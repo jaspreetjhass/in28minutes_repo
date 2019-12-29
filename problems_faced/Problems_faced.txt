@@ -1,0 +1,69 @@
+Problems faced in spring boot app ?
+Q - spring boot do not load table with initial data through data.sql if you use database other than im memory database such as mysql, oracle.
+A - if you want to load initial data, add the below properties in the application.properties file
+	spring.datasource.initialization-mode=always
+Q - in case of non in memory db, hibernate do not generate table automatically ?
+A - add the below property in the application.properties file
+	spring.jpa.hibernate.ddl-auto=create-drop
+			or
+	#spring.jpa.generate-ddl=true
+Q - How to run mysql on Docker ?
+A - there are 2 ways to run mysql inside docker
+	1- docker pull mysql:mysql-server
+		docker run -p 3306:3306 mysql:mysql-server
+
+		--here docker run command use mysql-server image to install the mysql server inside the container.
+		--after the mysql server started, you will get default password.
+		--in order to interact with the mysql server running inside container, type below docker command
+   
+		docker exec -it containerid sh
+		mysql -u root -p default password
+   
+		- after this you can change the default password by using the below commands;
+			ALTER USER 'root'@'localhost' IDENTIFIED BY 'password';
+
+		- you can add other user as well in the mysql-server by using below commands
+  
+			CREATE USER 'username'@'%' IDENTIFIED BY 'password';
+
+			GRANT ALL PRIVILEGES ON *.* TO 'username'@'%' WITH GRANT OPTION;
+
+			FLUSH PRIVILEGES;  
+   
+	2- docker run mysql:mysql-server
+
+
+Q - How to connect spring boot application with mysql running in container ?
+A - In order to connect with mysql-server running inside aws ec2 container, set the below properties in the application.properties file
+
+	spring.datasource.url=jdbc:mysql://ec2-public-dns:3306/mydb
+	
+	
+Q - how to connect spring boot application running in one container with mysql server running in another container within the same host machine?
+
+A - it can be done using docker-compose. There are other ways also to achieve the same. Sample docker-compose.yml configuration are listed below.
+		
+		version: "3"
+		services:
+			mysql:
+                image: mysql_local
+                volumes:
+                        - ./mysql_data/:/var/lib/mysql/
+                ports: 
+                        - "3306:3306"
+			exchange-service-app:
+                depends_on:
+                        - mysql
+                build:
+                        context: ./
+                        dockerfile: exchangeDockerFile
+                ports:
+                        - "9090:9090"
+                hostname: ip-172-31-38-251          
+
+
+Note:
+	- security group setup is a important steps. make sure you setup the correct ports.	
+	- based on the microservice port, configure the security group applied on ec2 instance
+	-incase of docker-compose, a virtual network is getting created with hostname as container id. you need to set hostname properties inside docker-compose.yml file.
+

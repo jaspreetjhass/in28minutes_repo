@@ -5,6 +5,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.exceptions.ApplicationException;
 import com.example.demo.models.LimitConfig;
 import com.example.demo.models.LimitResult;
 
@@ -21,5 +22,11 @@ public class LimitResource {
 
 		return new LimitResult(config.getMinimum(), config.getMaximum(),
 				Long.parseLong(env.getProperty("server.port")));
+	}
+	
+	@GetMapping(path = { "/exception/limits" })
+	public LimitResult getResultException() {
+
+		throw new ApplicationException("exception occured");
 	}
 }

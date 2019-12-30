@@ -12,3 +12,9 @@ Things to do in microservices to get started
 11-implement exception handling mechanism for microservices
 12-use cloud bus for distributed configuration management
 13-exception handling for microservices - refer limit configuration module for exception handling sample
+14-model validations -size, min, max, past etc
+15-static response filtering
+16-dynamic response filtering
+17-api versioning -- uri versioning, params versioning, headers versioning, media type versioning
+
+note: -refer project advancedrestfulservice for point no : 13-17

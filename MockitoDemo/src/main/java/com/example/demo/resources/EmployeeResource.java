@@ -41,7 +41,7 @@ public class EmployeeResource {
 		LOGGER.trace("Enter into method");
 		LOGGER.info("fetch employee having id " + empId);
 		final Employee user = employeeService.findEmployeeById(empId);
-		LOGGER.info("address is: " + user.getAddress());
+		//LOGGER.info("address is: " + user.getAddress());
 		LOGGER.trace("Exit from method");
 		return user;
 	}

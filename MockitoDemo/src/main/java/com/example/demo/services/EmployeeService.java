@@ -61,6 +61,7 @@ public class EmployeeService {
 		final Employee outputEmployee = optional.get();
 		outputEmployee.setEmpName(employee.getEmpName());
 		outputEmployee.setAddress(employee.getAddress());
+		employeeRepository.save(outputEmployee);
 		LOGGER.trace("Exit from method");
 		return outputEmployee;
 	}

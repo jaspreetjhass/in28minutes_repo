@@ -45,8 +45,6 @@ public class EmployeeResourceFeignWrapper {
 	public Employee findUserById(@PathVariable final Integer empId) {
 		LOGGER.trace("Enter into method");
 		LOGGER.info("fetch employee having id " + empId);
-		StringJoiner joiner = new StringJoiner(AppConstant.BLANK);
-		joiner.add(AppConstant.PRODUCER_URL).add(AppConstant.EMP_ID_PLACEHOLDER);
 		final Employee employee = employeeFeignClient.findUserById(empId);
 		LOGGER.info("address is: " + employee.getAddress());
 		LOGGER.trace("Exit from method");

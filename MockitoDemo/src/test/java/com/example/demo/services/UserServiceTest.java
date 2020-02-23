@@ -3,7 +3,8 @@ package com.example.demo.services;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.times;
@@ -14,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -36,7 +37,7 @@ public class UserServiceTest {
 	@Test
 	public void findByUserIdTest() {
 
-		List<Post> posts = Arrays.asList(new Post(1, "hello swagger"));
+		List<Post> posts = Arrays.asList(Post.builder().postId(1).message("message1").build());
 		User user = new User(1, "jaspreetjhass", posts);
 		Optional<User> optional = Optional.of(user);
 
@@ -78,11 +79,13 @@ public class UserServiceTest {
 	@Test
 	public void updateUserTest() {
 
-		User user = new User(1, "user2", Arrays.asList(new Post(1, "message1"), new Post(2, "message2")));
+		User user = User.builder().userId(1).userName("user1").build();
+		user.setPosts(Arrays.asList(Post.builder().postId(1).message("message1").user(user).build()));
+
 		Optional<User> optional = Optional.of(new User(1, "user1", null));
-	
+
 		when(repo.findById(1)).thenReturn(optional);
-		
+
 		User outputUser = service.updateUser(1, user);
 		assertEquals("user2", outputUser.getUserName());
 		assertThat(outputUser.getPosts().size(), is(equalTo(2)));

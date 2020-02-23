@@ -1,6 +1,7 @@
-package com.example.demo.repositories;
+package com.example.demo1.repositoryTest;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.times;
@@ -12,13 +13,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import com.example.demo.models.Post;
 import com.example.demo.models.User;
+import com.example.demo.repositories.UserRepository;
 
 @SpringJUnitConfig
 //@ContextConfiguration(classes = { AppTestConfig.class })
@@ -30,7 +32,7 @@ public class UserRepositoriesTest {
 	@Test
 	public void findByUserIdTest() {
 
-		List<Post> posts = Arrays.asList(new Post(1, "hello swagger"));
+		List<Post> posts = Arrays.asList(Post.builder().postId(1).message("message1").build());
 		User user = new User(1, "jaspreetjhass", posts);
 		Optional<User> optional = Optional.of(user);
 

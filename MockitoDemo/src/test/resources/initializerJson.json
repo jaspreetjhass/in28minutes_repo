@@ -1,0 +1,116 @@
+[
+	{
+		"id": "29b80534-ba0c-464a-96a9-e8e25eeb6338",
+		"httpRequest": {
+			"method": "GET",
+			"path": "/employees"
+		},
+		"times": {
+			"unlimited": true
+		},
+		"timeToLive": {
+			"unlimited": true
+		},
+		"httpResponse": {
+			"statusCode": 200,
+			"body": {
+				"type": "STRING",
+				"string": "[{\"empId\":1,\"empName\":\"empName1\",\"address\":\"address1\"},{\"empId\":2,\"empName\":\"empName2\",\"address\":\"address2\"}]",
+				"contentType": "application/json"
+			}
+		}
+	},
+	{
+		"id": "96583454-1058-4a19-856a-a1157ffca4fe",
+		"httpRequest": {
+			"method": "GET",
+			"path": "/employees/1"
+		},
+		"times": {
+			"unlimited": true
+		},
+		"timeToLive": {
+			"unlimited": true
+		},
+		"httpResponse": {
+			"statusCode": 200,
+			"body": {
+				"type": "STRING",
+				"string": "{\"empId\":1,\"empName\":\"empName1\",\"address\":\"address1\"}",
+				"contentType": "application/json"
+			}
+		}
+	},
+	{
+		"id": "aed5daa7-a28d-48dc-b5f2-f278f73789c7",
+		"httpRequest": {
+			"method": "DELETE",
+			"path": "/employees/1"
+		},
+		"times": {
+			"unlimited": true
+		},
+		"timeToLive": {
+			"unlimited": true
+		},
+		"httpResponse": {
+			"statusCode": 204
+		}
+	},
+	{
+		"id": "7d1ec91f-77e5-4738-99f3-b42e089250ae",
+		"httpRequest": {
+			"method": "POST",
+			"path": "/employees",
+			"headers": {
+				"content-type": [
+					"application/json"
+				],
+				"accept": [
+					"application/json"
+				]
+			},
+			"body": "{\"empId\":null,\"empName\":\"empName1\",\"address\":\"address1\"}"
+		},
+		"times": {
+			"unlimited": true
+		},
+		"timeToLive": {
+			"unlimited": true
+		},
+		"httpResponse": {
+			"statusCode": 201,
+			"body": {
+				"type": "STRING",
+				"string": "{\"empId\":1,\"empName\":\"empName1\",\"address\":\"address1\"}",
+				"contentType": "application/json"
+			}
+		}
+	},
+	{
+		"id": "4f847ccc-78c8-47a4-b10f-cf71e70bfae5",
+		"httpRequest": {
+			"method": "PUT",
+			"path": "/employees/1",
+			"headers": {
+				"content-type": [
+					"application/json;charset=UTF-8"
+				]
+			},
+			"body": "{\"empId\":1,\"empName\":\"empName1\",\"address\":\"address1\"}"
+		},
+		"times": {
+			"unlimited": true
+		},
+		"timeToLive": {
+			"unlimited": true
+		},
+		"httpResponse": {
+			"body": {
+				"type": "STRING",
+				"string": "{\"empId\":1,\"empName\":\"empName1\",\"address\":\"address1\"}",
+				"contentType": "application/json"
+			}
+		}
+	}
+]

@@ -1,4 +1,4 @@
-package com.example.demo1.repositoryTest;
+package com.example.demo2.repositories;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -7,21 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import com.example.demo.models.Employee;
 import com.example.demo.repositories.EmployeeRepository;
-import com.example.demo1.SpringBootTestApp;
 
-@SpringJUnitConfig(classes = { SpringBootTestApp.class })
-//@SpringBootTest(classes = {SpringBootTestApp.class})
-@Transactional
-//@DataJpaTest
+@DataJpaTest
 public class EmployeeRespositoryTest {
 
 	@Autowired

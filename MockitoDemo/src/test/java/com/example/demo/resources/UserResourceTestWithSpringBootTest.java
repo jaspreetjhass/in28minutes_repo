@@ -14,8 +14,10 @@ import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -30,9 +32,12 @@ import com.example.demo.models.User;
 import com.example.demo.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+// this test case will not run due to presence of employee feign client in the project.
+
 @ActiveProfiles(value = { "test" })
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureJsonTesters
 public class UserResourceTestWithSpringBootTest {
 
 	@Autowired
@@ -41,12 +46,17 @@ public class UserResourceTestWithSpringBootTest {
 	@MockBean
 	private UserService service;
 
+	@Autowired
+	private JacksonTester<User> jsonParser;
+
 	@Test
 	public void findUserById() throws Exception {
 
-		final String expectedString = "{userId:null,userName:\"jaspreet\",posts:[]}";
+		final User user = User.builder().userId(1).userName("userName1").build();
+		user.setPosts(Arrays.asList(Post.builder().postId(1).message("message1").build()));
+		final String expectedString = jsonParser.write(user).getJson();
 
-		when(service.findUserById(1)).thenReturn(new User(null, "jaspreet", Arrays.asList()));
+		when(service.findUserById(1)).thenReturn(user);
 		final RequestBuilder requestBuilder = MockMvcRequestBuilders.get("http://localhost:8080/users/1")
 				.accept(MediaType.APPLICATION_JSON);
 		final MvcResult result = mvc.perform(requestBuilder).andReturn();
@@ -61,7 +71,8 @@ public class UserResourceTestWithSpringBootTest {
 		final String expectedResponse = "[{userId:1,userName:\"user1\",posts:[{postId:1,message:\"post1\"},{postId:2,message:\"post2\"}]}]";
 
 		User user1 = User.builder().userId(1).userName("user1").build();
-		user1.setPosts(Arrays.asList(Post.builder().postId(1).message("message1").user(user1).build()));
+		user1.setPosts(Arrays.asList(Post.builder().postId(1).message("post1").build(),
+				Post.builder().postId(2).message("post2").build()));
 
 		final List<User> userList = Arrays.asList(user1);
 
@@ -80,16 +91,16 @@ public class UserResourceTestWithSpringBootTest {
 	public void addUser() throws Exception {
 
 		final String expectedResponse = "{userId:1,userName:\"user1\",posts:[{postId:1,message:\"post1\"}]}";
-		User user1 = User.builder().userId(1).userName("user1").build();
-		user1.setPosts(Arrays.asList(Post.builder().postId(1).message("message1").user(user1).build()));
+		User user = User.builder().userId(1).userName("user1").build();
+		user.setPosts(Arrays.asList(Post.builder().postId(1).message("post1").user(user).build()));
 
-		when(service.addUser(any())).thenReturn(user1);
+		when(service.addUser(any())).thenReturn(user);
 
 		final ObjectMapper mapper = new ObjectMapper();
 
 		final RequestBuilder requestBuilder = MockMvcRequestBuilders.post("http://localhost:8080/users")
 				.accept(MediaType.APPLICATION_JSON_VALUE).contentType(MediaType.APPLICATION_JSON_VALUE)
-				.content(mapper.writeValueAsString(user1));
+				.content(mapper.writeValueAsString(user));
 
 		final MvcResult result = mvc.perform(requestBuilder).andReturn();
 		final MockHttpServletResponse response = result.getResponse();
@@ -103,8 +114,8 @@ public class UserResourceTestWithSpringBootTest {
 	public void updateUser() throws Exception {
 
 		final String expectedResponse = "{userId:1,userName:\"user2\",posts:[{postId:1,message:\"post1\"}]}";
-		User user = User.builder().userId(1).userName("user1").build();
-		user.setPosts(Arrays.asList(Post.builder().postId(1).message("message1").user(user).build()));
+		User user = User.builder().userId(1).userName("user2").build();
+		user.setPosts(Arrays.asList(Post.builder().postId(1).message("post1").build()));
 
 		when(service.updateUser(anyInt(), any())).thenReturn(user);
 

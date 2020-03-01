@@ -42,7 +42,7 @@ public class EmployeeResourceFeignWrapper {
 	@GetMapping(path = { "/employees/{empId}" }, headers = { "accept=application/json" })
 	@ApiOperation(httpMethod = "GET", response = Employee.class, responseHeaders = {
 			@ResponseHeader(name = "accept", description = "application/json") }, value = "find by user id")
-	public Employee findUserById(@PathVariable final Integer empId) {
+	public Employee findEmployeeById(@PathVariable final Integer empId) {
 		LOGGER.trace("Enter into method");
 		LOGGER.info("fetch employee having id " + empId);
 		final Employee employee = employeeFeignClient.findUserById(empId);
@@ -69,21 +69,16 @@ public class EmployeeResourceFeignWrapper {
 	public Resource<Employee> addEmployee(@RequestBody final Employee employee) {
 		LOGGER.trace("Enter into method");
 		LOGGER.info("saving employee in database and adding relative links");
-
-		final Link link = linkTo(methodOn(EmployeeResourceFeignWrapper.class).findAllEmployee())
-				.withRel("all-employees");
-		employeeFeignClient.addEmployee(employee);
-		final Resource<Employee> resource = new Resource<Employee>(employee, Arrays.asList(link));
-
+		Resource<Employee> response = employeeFeignClient.addEmployee(employee);
 		LOGGER.trace("Exit from method");
-		return resource;
+		return response;
 	}
 
 	@PutMapping(path = { "/employees/{empId}" })
 	@ApiOperation(httpMethod = "PUT", response = Employee.class, responseHeaders = {
 			@ResponseHeader(name = "accept", description = "application/json"),
 			@ResponseHeader(name = "content-type", description = "application/json") }, value = "update user")
-	public Employee updateUser(@PathVariable final Integer empId, @RequestBody final Employee employee) {
+	public Employee updateEmployee(@PathVariable final Integer empId, @RequestBody final Employee employee) {
 		LOGGER.trace("Enter into method");
 		LOGGER.trace("Exit from method");
 		StringJoiner joiner = new StringJoiner(AppConstant.BLANK);

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,13 +40,13 @@ public class EmployeeResourceWrapper {
 	private RestTemplate restTemplate;
 	private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeResourceWrapper.class);
 
-	@GetMapping(path = { "/employees/{empId}" }, headers = { "accept=application/json" })
+	@GetMapping(path = { "/employees/{empId}" }, headers = { "accept=application/json"})
 	@ApiOperation(httpMethod = "GET", response = Employee.class, responseHeaders = {
 			@ResponseHeader(name = "accept", description = "application/json") }, value = "find by user id")
-	public Employee findUserById(@PathVariable final Integer empId) {
+	public Employee findEmployeeById(@PathVariable final Integer empId) {
 		LOGGER.trace("Enter into method");
 		LOGGER.info("fetch employee having id " + empId);
-		StringJoiner joiner = new StringJoiner(AppConstant.BLANK);
+		final StringJoiner joiner = new StringJoiner(AppConstant.BLANK);
 		joiner.add(AppConstant.PRODUCER_URL).add(AppConstant.EMP_ID_PLACEHOLDER);
 		final Employee employee = restTemplate.getForObject(joiner.toString(), Employee.class, new Object[] { empId });
 		LOGGER.info("address is: " + employee.getAddress());
@@ -85,22 +86,22 @@ public class EmployeeResourceWrapper {
 	@ApiOperation(httpMethod = "PUT", response = Employee.class, responseHeaders = {
 			@ResponseHeader(name = "accept", description = "application/json"),
 			@ResponseHeader(name = "content-type", description = "application/json") }, value = "update user")
-	public Employee updateUser(@PathVariable final Integer empId, @RequestBody final Employee employee) {
+	public ResponseEntity<Employee> updateEmployee(@PathVariable final Integer empId, @RequestBody final Employee employee) {
 		LOGGER.trace("Enter into method");
 		LOGGER.trace("Exit from method");
-		StringJoiner joiner = new StringJoiner(AppConstant.BLANK);
+		final StringJoiner joiner = new StringJoiner(AppConstant.BLANK);
 		joiner.add(AppConstant.PRODUCER_URL).add(AppConstant.EMP_ID_PLACEHOLDER);
-		restTemplate.put(joiner.toString(), employee, new Object[] { empId });
-		return employee;
+		restTemplate.put(joiner.toString(), employee, new Object[] {"1"});
+	
+		return ResponseEntity.accepted().body(employee);
 	}
 
 	@DeleteMapping(path = { "/employees/{empId}" })
-	@ApiOperation(httpMethod = "DELETE", response = Employee.class, responseHeaders = {
-			@ResponseHeader(name = "accept", description = "application/json") }, value = "delete user")
+	@ApiOperation(httpMethod = "DELETE", value = "delete user")
 	public void deleteEmployee(@PathVariable final Integer empId) {
 		LOGGER.trace("Enter into method");
 		LOGGER.info("delete employee from database");
-		StringJoiner joiner = new StringJoiner(AppConstant.BLANK);
+		final StringJoiner joiner = new StringJoiner(AppConstant.BLANK);
 		joiner.add(AppConstant.PRODUCER_URL).add(AppConstant.EMP_ID_PLACEHOLDER);
 		restTemplate.delete(joiner.toString(), new Object[] { empId });
 		LOGGER.trace("Exit from method");

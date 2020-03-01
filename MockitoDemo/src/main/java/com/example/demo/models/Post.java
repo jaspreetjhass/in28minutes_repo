@@ -5,6 +5,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +24,7 @@ public class Post {
 	private String message;
 	@ManyToOne
 	@JoinColumn(name="user_id", nullable=false,insertable=false,updatable=false )
+	@JsonIgnore
 	private User user;
 	
 }

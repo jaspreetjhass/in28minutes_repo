@@ -37,11 +37,10 @@ public class EmployeeResource {
 	@GetMapping(path = { "/employees/{empId}" }, headers = { "accept=application/json" })
 	@ApiOperation(httpMethod = "GET", response = Employee.class, responseHeaders = {
 			@ResponseHeader(name = "accept", description = "application/json") }, value = "find by user id")
-	public Employee findUserById(@PathVariable final Integer empId) {
+	public Employee findEmployeeById(@PathVariable final Integer empId) {
 		LOGGER.trace("Enter into method");
 		LOGGER.info("fetch employee having id " + empId);
 		final Employee user = employeeService.findEmployeeById(empId);
-		//LOGGER.info("address is: " + user.getAddress());
 		LOGGER.trace("Exit from method");
 		return user;
 	}
@@ -77,7 +76,7 @@ public class EmployeeResource {
 	@ApiOperation(httpMethod = "PUT", response = Employee.class, responseHeaders = {
 			@ResponseHeader(name = "accept", description = "application/json"),
 			@ResponseHeader(name = "content-type", description = "application/json") }, value = "update user")
-	public Employee updateUser(@PathVariable final Integer empId, @RequestBody final Employee employee) {
+	public Employee updateEmployee(@PathVariable final Integer empId, @RequestBody final Employee employee) {
 		LOGGER.trace("Enter into method");
 		LOGGER.trace("Exit from method");
 		return employeeService.updateEmployee(empId, employee);

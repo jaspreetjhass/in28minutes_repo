@@ -39,7 +39,8 @@ public class SpringBootTestApp {
 		 * "C:/Users/hp/Documents/unitTestingdemo/in28minutes_repo/MockitoDemo/src/main/resources/initializerJson.json"
 		 * );
 		 */
-		ConfigurationProperties.initializationJsonPath("src/test/resources/initializerJson.json");
+		//ConfigurationProperties.initializationJsonPath("src/test/resources/initializerJson.json");
+		ConfigurationProperties.initializationJsonPath("initializerJson.json");
 		final ClientAndServer clientAndServer = new ClientAndServer(8080);
 		return clientAndServer;
 	}
